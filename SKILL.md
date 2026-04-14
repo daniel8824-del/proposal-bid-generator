@@ -19,8 +19,7 @@ description: "RFP-driven bid proposal PPTX generator with Impact-8 Framework and
 | 웹앱 원본 | `/home/daniel/proposal-bid-app` / `https://proposal-bid.up.railway.app` |
 | 작업 디렉토리 | `/mnt/c/Users/daniel/Desktop/프레젠테이션/proposal-bid/` |
 | 최종 출력 | `output/{프로젝트명}/제안서_svg.pptx` |
-| **기본 모드** | **SVG 모드** (품질 우선) |
-| 대안 모드 | slide_kit 모드 (속도·안정성 우선 시) |
+| **모드** | **SVG 모드** (품질 우선, 유일한 모드) |
 | 슬라이드 상한 | MAX_SLIDES = 120장 |
 
 ### ★ 최우선 원칙 (위반 시 중단)
@@ -61,7 +60,7 @@ description: "RFP-driven bid proposal PPTX generator with Impact-8 Framework and
     │   └── content_generator.py      ← Impact-8 콘텐츠 생성 로직 (32K)
     ├── generators/
     │   ├── svg_generator.py          ← ★ SVG_SYSTEM_PROMPT / validate_svg / _slide_to_prompt_data / _fallback_svg
-    │   ├── slide_kit.py              ← slide_kit 모드 API (89K)
+    │   ├── slide_kit.py              ← 웹앱 내부 모듈 (미사용, 참조 전용)
     │   ├── code_generator_parallel.py
     │   └── svg_to_pptx/              ← SVG→PPTX 네이티브 변환 내부 로직
     ├── orchestrators/
@@ -289,31 +288,6 @@ python3 -m markitdown output/{프로젝트명}/제안서_svg.pptx | grep -iE "xx
 - [ ] 폴백 SVG 적용 슬라이드 5% 이하 (초과 시 STEP 4 재시도 권장)
 
 **Exit:** 체크리스트 전부 ✅ + 사용자에게 최종 파일 경로 전달.
-
----
-
-## 3. 대안 모드 — slide_kit (속도·안정성 우선)
-
-SVG 품질이 불필요하거나 120장+ 대형 제안서 안정성이 중요할 때만 선택.
-
-**파이프라인:** STEP 1~3 동일 → STEP 4 대신 `references/generators/slide_kit.py` API로 Python 스크립트 작성 → 실행.
-
-**슬라이드 kit 엄수 원칙:**
-- ❌ `slide_kit` 함수 재정의 금지
-- ❌ `RGBColor` 하드코딩 금지 → `C["primary"]` 등 상수 사용
-- ❌ Pretendard 외 폰트 사용 금지
-
-API 시그니처·레이아웃·컬러 토큰은 `references/generators/slide_kit.py` (89K) 직접 참조. 여기 재기재하지 않는다.
-
-**모드 선택 기준:**
-
-| 상황 | 권장 |
-|------|------|
-| 디자인 최우선, 고객 프레젠테이션 | **SVG (기본)** |
-| 사용자가 "고급 모드"/"SVG" 명시 | **SVG (기본)** |
-| 100장+, 안정성 최우선 | slide_kit |
-| 빠른 내부 검토용 | slide_kit |
-| 사용자가 "기본 모드"/"빠르게" 명시 | slide_kit |
 
 ---
 
