@@ -1,6 +1,6 @@
 ---
 name: proposal-bid
-description: "RFP-driven bid proposal PPTX generator. Analyzes RFP documents, plans Impact-8 Framework content, generates SVG slides via Claude, and converts to native DrawingML PPTX. Orchestrates the full webapp pipeline (proposal-bid-app) with Claude Code as the LLM engine. Triggers: /proposal-bid, 제안서, 입찰, RFP, proposal, bid"
+description: "RFP-driven bid proposal PPTX generator with Impact-8 Framework and SVG→DrawingML pipeline. Triggers: /proposal-bid, 제안서, 입찰, RFP, proposal, bid"
 ---
 
 # proposal-bid Skill
